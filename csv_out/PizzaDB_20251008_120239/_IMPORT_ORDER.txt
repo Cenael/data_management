@@ -1,0 +1,9 @@
+Ordine consigliato di import:
+- Shop.csv
+- Employee.csv
+- EmployeeHistory.csv
+- Customer.csv
+- Coupon.csv
+- Product.csv
+- CustomerOrder.csv
+- CustomerOrderItem.csv
