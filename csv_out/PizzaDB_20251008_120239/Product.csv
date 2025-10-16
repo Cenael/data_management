@@ -1,0 +1,41 @@
+ProductID,ProductName,ProductType,Price
+1,Focaccia,SIDE,4.57
+2,Gelato,DESS,6.29
+3,Napoli,PIZZA,6.66
+4,Patatine,SIDE,2.43
+5,Gelato1,DESS,5.55
+6,PaneAglio,SIDE,4.42
+7,Hawaiian,PIZZA,11.35
+8,Aranciata,DRINK,1.13
+9,Tiramisù,DESS,4.82
+10,Aranciata1,DRINK,2.29
+11,Focaccia1,SIDE,4.65
+12,Ortolana,PIZZA,8.8
+13,Gelato2,DESS,4.41
+14,Olive,SIDE,2.77
+15,PannaCotta,DESS,5.15
+16,PaneAglio1,SIDE,4.19
+17,Ortolana1,PIZZA,7.36
+18,Gelato3,DESS,4.63
+19,PannaCotta1,DESS,4.79
+20,Tè Freddo,DRINK,1.25
+21,Patatine1,SIDE,5.27
+22,Tè Freddo1,DRINK,1.93
+23,Cola,DRINK,1.07
+24,Limonata,DRINK,2.83
+25,Siciliana,PIZZA,8.19
+26,Tè Freddo2,DRINK,3.09
+27,Brownie,DESS,3.85
+28,Capricciosa,PIZZA,10.56
+29,Cola1,DRINK,3.41
+30,Tiramisù1,DESS,4.95
+31,Siciliana1,PIZZA,6.37
+32,Gelato4,DESS,6.33
+33,Brownie1,DESS,5.91
+34,PannaCotta2,DESS,5.6
+35,Brownie2,DESS,3.91
+36,Chinotto,DRINK,2.91
+37,PannaCotta3,DESS,3.96
+38,Ortolana2,PIZZA,7.02
+39,Focaccia2,SIDE,5.57
+40,Quattro Formaggi,PIZZA,6.48
