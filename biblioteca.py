@@ -33,7 +33,8 @@ RENTALS_START = date.today() - relativedelta(months=12)
 RENTALS_END = date.today() - timedelta(days=1)
 
 # Inizializzazione Faker e random
-fake = Faker("it_IT")
+random.seed(RANDOM_SEED)
+Faker.seed(RANDOM_SEED)
 random.seed(RANDOM_SEED)
 Faker.seed(RANDOM_SEED)
 
@@ -54,10 +55,20 @@ def daterange(start: date, end: date) -> date:
 
 # Scrive una lista di dizionari su file CSV
 def write_csv(path, fieldnames, rows):
+    # Normalize values: dates -> ISO string, datetimes -> ISO, bool -> TRUE/FALSE
+    def normalize_value(v):
+        if isinstance(v, (date, datetime)):
+            return v.isoformat()
+        if isinstance(v, bool):
+            return "TRUE" if v else "FALSE"
+        return v
+
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(rows)
+        for r in rows:
+            row = {k: normalize_value(r.get(k)) for k in fieldnames}
+            writer.writerow(row)
 
 
 # Genera fornitori
@@ -111,7 +122,9 @@ def gen_book_copies(books):
     copies = []
     copy_id = count(1)
     for book in books:
-        for copy_num in range(1, random.randint(1, N_COPIES_PER_BOOK + 1) + 1):
+        # generate between 1 and N_COPIES_PER_BOOK copies per book
+        copies_count = random.randint(1, N_COPIES_PER_BOOK)
+        for copy_num in range(1, copies_count + 1):
             copies.append({
                 "BookCopyID": next(copy_id),
                 "BookID": book["BookID"],
@@ -144,15 +157,31 @@ def gen_rentals(n, book_copies, customers, employees):
     customer_ids = [c["CustomerID"] for c in customers]
     employee_ids = [e["EmployeeID"] for e in employees]
     available_copies = [bc for bc in book_copies if bc["BookStatus"] == "Available"]
-    for i in range(1, min(n, len(available_copies)) + 1):
+    max_rentals = min(n, len(available_copies))
+    for i in range(1, max_rentals + 1):
+        start = daterange(RENTALS_START, RENTALS_END)
+        # ensure end date is on or after start date (max rental 60 days)
+        latest_end = min(RENTALS_END, start + timedelta(days=60))
+        end = daterange(start, latest_end) if latest_end >= start else start
+        returned = random.choice([True, False])
+
+        # mark the chosen copy as rented (update original book_copies list)
+        book_copy = available_copies[i - 1]
+        book_copy_id = book_copy["BookCopyID"]
+        # update status in the master list as well
+        for bc in book_copies:
+            if bc["BookCopyID"] == book_copy_id:
+                bc["BookStatus"] = "Rented"
+                break
+
         rentals.append({
             "RentalID": i,
-            "BookCopyID": available_copies[i - 1]["BookCopyID"],
+            "BookCopyID": book_copy_id,
             "CustomerID": random.choice(customer_ids),
             "EmployeeID": random.choice(employee_ids),
-            "StartDate": daterange(RENTALS_START, RENTALS_END),
-            "EndDate": daterange(RENTALS_START, RENTALS_END),
-            "Returned": random.choice([True, False])
+            "StartDate": start,
+            "EndDate": end,
+            "Returned": returned
         })
     return rentals
 
